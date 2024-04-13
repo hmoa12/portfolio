@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
   },
   password: {
@@ -35,8 +36,12 @@ UserSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
 
-  delete userObject.password;
-  delete userObject.tokens;
+  if (process.env.NODE_ENV === "production") {
+    delete userObject.password;
+    delete userObject.tokens;
+  }
+
+  return userObject;
 };
 
 UserSchema.methods.generateAuthToken = async function () {

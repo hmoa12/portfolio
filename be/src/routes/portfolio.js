@@ -1,8 +1,10 @@
 const express = require("express");
 const Portfolio = require("../models/portfolio");
+const auth = require("../middleware/auth");
 
 const router = express.Router();
 
+//This must be a temporary route for initiation... This should either be protected or removed.
 router.post("/create", async (req, res) => {
   try {
     const info = req.body;
@@ -20,7 +22,7 @@ router.get("/", async (req, res) => {
   res.send(info);
 });
 
-router.patch("/update", async (req, res) => {
+router.patch("/update", auth, async (req, res) => {
   const _id = req.params._id;
   const updates = { $set: req.body };
   try {
@@ -30,7 +32,7 @@ router.patch("/update", async (req, res) => {
     }
     res.send(info);
   } catch (e) {
-    res.send(e);
+    res.status(500).send("Internal Server Error");
   }
 });
 

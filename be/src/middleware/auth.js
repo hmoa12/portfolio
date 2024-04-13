@@ -27,3 +27,5 @@ const auth = async (req, res, next) => {
     res.status(401).send("Authorization failed.");
   }
 };
+
+module.exports = auth;
